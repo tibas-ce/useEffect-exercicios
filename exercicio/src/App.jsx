@@ -19,41 +19,61 @@ const InputsContainer = styled.div`
 `
 
 function App() {
-  const [tarefas, setTarefa] = useState([]);
+  const [tarefas, setTarefas] = useState([]);
   const [inputValue, setInputValue] = useState("");
-  const [filtro, setFiltro] = useState("")
+  const [filtro, setFiltro] = useState("");
 
-  // useEffect() => {
-  //   () => {
+  //Exercício 4
+  useEffect(() =>{
+    tarefas.length > 0 && localStorage.setItem("tarefa", JSON.stringify(tarefas))
+  }, [tarefas]);
 
-  //   },
-  //   []
-  // };
+  useEffect(() =>{
+    setTarefas(JSON.parse(localStorage.getItem("tarefa")))     
+  }, []);
 
-  // useEffect() => {
-  //   () => {
-
-  //   },
-  //   []
-  // };
-
+  //Exercício 1
   const onChangeInput = (event) => {
-    console.log("aaa");
-  }
+    setInputValue(event.target.value);
+  };
 
+  //Exercício 2
   const criaTarefa = () => {
-    console.log("aaa");
-  }
+    const novaTarefa = {
+      id: Date.now(),
+      texto: inputValue,
+      completa: false
+    };
+
+    const tarefaAdicionada = [...tarefas, novaTarefa];
+    setTarefas(tarefaAdicionada);
+    setInputValue("");
+
+  };
 
   const selectTarefa = (id) => {
-    console.log("aaa");
-  }
+    const novaLista = tarefas.map((item) =>{
+      if(id === item.id){
+        const novoItem = {...item, completa: !item.completa}
+        return novoItem
+      } else{
+        return item
+      };
+    });
+    setTarefas(novaLista);
 
+    //Forma simplificada (Leo Carrati)
+  //   setTarefa(tarefas.map((item) => item.id == id ? { ...item, completa: !item.completa} : item))
+  // };
+
+    console.log(id);
+  };
+  
+  //Exercício 3
   const onChangeFilter = (event) => {
-    console.log("aaa");
+    setFiltro(event.target.value);
   }
-
-
+  
   const listaFiltrada = tarefas.filter(tarefa => {
     switch (filtro) {
       case 'pendentes':
@@ -64,7 +84,6 @@ function App() {
         return true
     }
   });
-
 
   return (
     <div className="App">
